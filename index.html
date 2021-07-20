@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>đồng hồ bấm giờ</title>
+</head>
+<style>
+    
+    span {
+        font-size: 140px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    .o{
+        width: 800px;
+        text-align: center;
+        background-color: rgb(125, 243, 184);
+        color:white;
+        border-radius: 9px;
+    }
+    .e{
+        font-size: 40px;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        padding: 20px;
+        margin:30px;
+        border-radius: 40px;
+        background-color: #1bc4b8;
+        color:rgb(255, 255, 255);
+    }
+    h1{
+        font-family: monospace;
+        text-align: center;
+    }
+    body{
+        background-color: rgb(135, 203, 243);
+        color:white;
+    }
+    .a{
+       background-color:rgb(228, 230, 118);
+       border-radius: 6px;
+    }
+</style>
+
+<body>
+    <div style="position: absolute;left: 0px;top: 0px;font-size: 20px; width: 300px;" class="a container">
+            <h1>Rubik Timer</h1>
+            <hr>
+            <p style="color:red">by. Phạm Huỳnh Phát</p>
+            <br>
+            <hr>
+            <spanp style="color:red">Result:</span><button onclick="xoa()" >xoá</button>
+          <div id="otrong" style="color: blue;">
+
+          </div> 
+    </div>
+   <form border='center' style="position: relative;left:480px; top:100px">
+    <fieldset class="o">
+        <p id="datapay"><span id="min" style="display: none">0 </span><span id="s">00</span><span id="cham">.</span><span id="ms">00</span></p>
+    </fieldset>
+</form>
+<div style="position:relative; left: 670px;top:200px" >
+    <button onclick="display()"class="e" id='go'>Start</button>
+    <button onclick="dung()" class="e"style="background-color:rgb(63, 173, 109)">Pause</button>
+</div>
+    <script>
+        let chay;
+        let mili = 0;
+        let s = 0;
+        let minutes = 0;
+        function start() {
+            mili++;
+            if (mili == 99) {
+                mili = 0;
+                s++;
+            }
+            if (s == 60) {
+                s = 0;
+                minutes++
+                document.getElementById('min').style.display = 'inline';
+            }
+            document.getElementById('ms').innerText = mili;
+            if (mili <= 9) {
+                document.getElementById('ms').innerText = '0' + mili;}
+            if (s <= 9) {
+                document.getElementById('s').innerText = '0' + s;
+            } else {
+                document.getElementById('s').innerText = s;
+            }
+            document.getElementById('min').innerText = minutes + ':';
+        }
+        function display() {
+            chay = setInterval(start, 10);
+            document.getElementById('go').disabled = true;
+        }
+        function dung() {
+            saveData();
+            loadData();
+            clearInterval(chay);
+            s=0;
+            mili=0;
+            minutes=0;
+            document.getElementById('min').style.display='none';
+            chay=null;
+            document.getElementById('go').disabled = false;
+
+        }       
+       
+        let a=0;
+        function sukienbanphim(evt){
+            console.log(evt.key)
+            if (evt.key==' '&&a==0){
+                display();
+                a++
+            }else if(evt.key==' '&&a==1){
+                dung();
+                a=0;
+            }
+        }
+        let data2=[];
+        window.addEventListener('keydown',sukienbanphim);
+        function saveData(){
+            let data=[s,mili];
+            data2+=JSON.stringify(data);
+            window.localStorage.setItem('time',data2);
+        }
+        function loadData(){
+          let  bien=window.localStorage.getItem('time');
+          document.getElementById('otrong').innerText="";
+          document.getElementById('otrong').innerText=bien;
+
+        }
+        function xoa(){
+            document.getElementById('otrong').innerText="";
+            window.localStorage.removeItem('time');
+        }
+    </script>
+</body>
+
+</html>
